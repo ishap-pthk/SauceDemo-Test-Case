@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Isha | QA Engineer Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12151A;
+    --bg-panel:#1A1E25;
+    --bg-panel-2:#20252D;
+    --text:#EDEBE4;
+    --text-dim:#9AA0AC;
+    --text-faint:#5B616D;
+    --accent:#D4A24E;
+    --accent-dim:#8A6B2E;
+    --pass:#4FB07C;
+    --pass-bg:rgba(79,176,124,0.12);
+    --fail:#D2645A;
+    --fail-bg:rgba(210,100,90,0.12);
+    --warn:#E0B84B;
+    --warn-bg:rgba(224,184,75,0.12);
+    --line:rgba(237,235,228,0.10);
+    --mono:'IBM Plex Mono', monospace;
+    --sans:'Inter', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  ::selection{background:var(--accent);color:#12151A;}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+
+  /* status pill - signature element */
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:var(--mono);font-size:11px;font-weight:600;
+    letter-spacing:0.06em;text-transform:uppercase;
+    padding:4px 10px;border-radius:3px;
+    border:1px solid currentColor;
+  }
+  .pill::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+  .pill.pass{color:var(--pass);background:var(--pass-bg);}
+  .pill.fail{color:var(--fail);background:var(--fail-bg);}
+  .pill.warn{color:var(--warn);background:var(--warn-bg);}
+  .pill.open{color:var(--fail);background:var(--fail-bg);}
+  .pill.closed{color:var(--pass);background:var(--pass-bg);}
+
+  /* nav */
+  header{
+    position:sticky;top:0;z-index:100;
+    background:rgba(18,21,26,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 28px;max-width:1080px;margin:0 auto;
+  }
+  .logo{
+    font-family:var(--mono);font-weight:600;font-size:15px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--pass);
+    box-shadow:0 0 0 3px var(--pass-bg);}
+  .navlinks{display:flex;gap:28px;align-items:center;}
+  .navlinks a{
+    font-family:var(--mono);font-size:12.5px;color:var(--text-dim);
+    letter-spacing:0.04em;text-transform:uppercase;
+    transition:color .2s;
+  }
+  .navlinks a:hover{color:var(--accent);}
+  .btn-cv{
+    font-family:var(--mono);font-size:12px;font-weight:600;
+    background:var(--accent);color:#12151A;
+    padding:9px 16px;border-radius:3px;letter-spacing:.03em;
+    text-transform:uppercase;
+    transition:transform .15s, box-shadow .15s;
+  }
+  .btn-cv:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(212,162,78,0.3);}
+  .menu-toggle{display:none;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;}
+
+  section{padding:96px 0;border-bottom:1px solid var(--line);}
+  .eyebrow{
+    font-family:var(--mono);font-size:12px;color:var(--accent);
+    letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:'$';color:var(--text-faint);}
+  h2{font-size:clamp(28px,4vw,38px);font-weight:800;margin-bottom:36px;letter-spacing:-0.01em;}
+
+  /* HERO */
+  #home{padding-top:120px;padding-bottom:110px;border-bottom:1px solid var(--line);position:relative;overflow:hidden;}
+  .hero-status{
+    font-family:var(--mono);font-size:12px;color:var(--pass);
+    display:inline-flex;align-items:center;gap:8px;
+    border:1px solid var(--pass);background:var(--pass-bg);
+    padding:5px 12px;border-radius:3px;margin-bottom:28px;
+  }
+  .hero-status::before{content:'';width:6px;height:6px;background:var(--pass);border-radius:50%;
+    animation:blink 1.6s infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+  h1{
+    font-size:clamp(38px,6vw,64px);font-weight:800;line-height:1.05;
+    letter-spacing:-0.02em;margin-bottom:22px;
+  }
+  h1 span{color:var(--accent);}
+  .hero-sub{font-size:17px;color:var(--text-dim);max-width:600px;margin-bottom:34px;}
+  .hero-tags{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px;}
+  .tag{
+    font-family:var(--mono);font-size:12px;color:var(--text-dim);
+    border:1px solid var(--line);padding:6px 12px;border-radius:3px;
+  }
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--accent);color:#12151A;font-weight:700;font-size:14px;
+    padding:13px 26px;border-radius:3px;transition:transform .15s;
+  }
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-outline{
+    border:1px solid var(--line);color:var(--text);font-weight:600;font-size:14px;
+    padding:13px 26px;border-radius:3px;transition:border-color .15s, color .15s;
+  }
+  .btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* ABOUT */
+  .about-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:56px;align-items:start;}
+  .about-text p{color:var(--text-dim);margin-bottom:16px;font-size:15.5px;}
+  .checklist{margin-top:24px;border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+  .checklist li{
+    display:flex;align-items:center;gap:12px;padding:13px 16px;
+    font-size:14px;border-bottom:1px solid var(--line);
+    font-family:var(--mono);
+  }
+  .checklist li:last-child{border-bottom:none;}
+  .checklist li .ck{color:var(--pass);font-weight:700;}
+
+  /* SKILLS */
+  .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .skill-card{
+    background:var(--bg-panel);border:1px solid var(--line);border-radius:8px;
+    padding:24px;
+  }
+  .skill-card h3{
+    font-family:var(--mono);font-size:12px;color:var(--accent);
+    letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;
+  }
+  .skill-card ul li{
+    font-size:14px;color:var(--text-dim);padding:6px 0;
+    display:flex;align-items:center;gap:8px;
+  }
+  .skill-card ul li::before{content:'▸';color:var(--accent);font-size:11px;}
+
+  /* PROJECTS */
+  .project{
+    background:var(--bg-panel);border:1px solid var(--line);border-radius:10px;
+    padding:34px;margin-bottom:28px;
+  }
+  .project-head{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:18px;}
+  .project-head h3{font-size:22px;font-weight:700;}
+  .project p.desc{color:var(--text-dim);font-size:14.5px;margin-bottom:20px;max-width:680px;}
+  .module-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px;}
+  .module-chip{
+    font-family:var(--mono);font-size:12.5px;color:var(--pass);
+    background:var(--pass-bg);border:1px solid var(--pass);
+    padding:5px 12px;border-radius:20px;display:flex;align-items:center;gap:6px;
+  }
+  .deliverables{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+  .deliv{
+    border:1px solid var(--line);border-radius:6px;padding:14px 16px;
+    font-size:13px;color:var(--text-dim);
+  }
+  .deliv b{display:block;color:var(--text);font-size:19px;font-family:var(--mono);}
+
+  /* TEST CASES */
+  .tc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .tc-card{
+    background:var(--bg-panel);border:1px solid var(--line);border-radius:8px;
+    padding:26px;text-align:left;
+  }
+  .tc-card .tc-count{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--accent);}
+  .tc-card h4{font-size:16px;margin:10px 0 6px;}
+  .tc-card p{font-size:13px;color:var(--text-dim);margin-bottom:18px;}
+  .tc-card a.view{
+    font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);
+    border:1px solid var(--accent-dim);padding:8px 14px;border-radius:4px;
+    display:inline-block;transition:background .15s, color .15s;
+  }
+  .tc-card a.view:hover{background:var(--accent);color:#12151A;}
+
+  /* BUG TABLE */
+  table{width:100%;border-collapse:collapse;background:var(--bg-panel);border-radius:8px;overflow:hidden;}
+  thead th{
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--text-faint);text-align:left;padding:14px 18px;border-bottom:1px solid var(--line);
+  }
+  tbody td{padding:15px 18px;font-size:14px;border-bottom:1px solid var(--line);color:var(--text-dim);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody td.id{font-family:var(--mono);color:var(--text);}
+  .sev{font-family:var(--mono);font-size:12px;font-weight:600;}
+  .sev.high{color:var(--fail);}
+  .sev.medium{color:var(--warn);}
+  .sev.low{color:var(--pass);}
+
+  /* API */
+  .api-panel{
+    background:var(--bg-panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  }
+  .api-tabbar{display:flex;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px;}
+  .api-tabbar div{padding:14px 20px;color:var(--text-dim);border-right:1px solid var(--line);}
+  .api-tabbar div.method{color:var(--pass);font-weight:700;}
+  .api-body{padding:26px;}
+  .api-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px;}
+  .api-stat{border:1px solid var(--line);border-radius:6px;padding:16px;}
+  .api-stat span{display:block;font-family:var(--mono);font-size:11px;color:var(--text-faint);text-transform:uppercase;margin-bottom:6px;}
+  .api-stat b{font-size:20px;font-family:var(--mono);}
+  .api-stat b.ok{color:var(--pass);}
+  pre.json{
+    background:#0D0F13;border:1px solid var(--line);border-radius:6px;
+    padding:18px;font-family:var(--mono);font-size:12.5px;color:#9CDCB0;
+    overflow-x:auto;line-height:1.7;
+  }
+  .json .k{color:#7CB8E8;}
+  .json .s{color:#E0B84B;}
+  .assertions{margin-top:20px;}
+  .assertions li{font-family:var(--mono);font-size:13px;color:var(--text-dim);padding:6px 0;display:flex;gap:10px;align-items:center;}
+  .assertions li::before{content:'✓';color:var(--pass);font-weight:700;}
+
+  /* CERTIFICATIONS */
+  .cert-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+  .cert-card{
+    background:var(--bg-panel);border:1px solid var(--line);border-radius:8px;
+    padding:22px;display:flex;gap:16px;align-items:flex-start;
+  }
+  .cert-icon{
+    width:40px;height:40px;border-radius:6px;background:var(--accent-dim);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    font-family:var(--mono);color:#12151A;font-weight:700;font-size:13px;background:var(--accent);
+  }
+  .cert-card h4{font-size:15px;margin-bottom:4px;}
+  .cert-card p{font-size:13px;color:var(--text-dim);}
+
+  /* RESUME */
+  #resume .resume-box{
+    background:var(--bg-panel);border:1px solid var(--line);border-radius:10px;
+    padding:40px;text-align:center;
+  }
+  #resume p{color:var(--text-dim);margin-bottom:22px;font-size:14.5px;}
+
+  /* CONTACT */
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+  .contact-list li{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:16px 0;border-bottom:1px solid var(--line);font-size:14.5px;
+  }
+  .contact-list li span.label{font-family:var(--mono);color:var(--text-faint);font-size:12px;text-transform:uppercase;letter-spacing:.05em;}
+  .contact-list li a{color:var(--accent);font-weight:600;}
+  .contact-cta{
+    background:var(--bg-panel);border:1px solid var(--line);border-radius:10px;
+    padding:30px;
+  }
+  .contact-cta p{color:var(--text-dim);font-size:14px;margin-bottom:20px;}
+
+  footer{padding:32px 0;text-align:center;font-family:var(--mono);font-size:12px;color:var(--text-faint);}
+
+  @media(max-width:820px){
+    .about-grid,.contact-grid{grid-template-columns:1fr;}
+    .skills-grid{grid-template-columns:repeat(2,1fr);}
+    .tc-grid{grid-template-columns:1fr;}
+    .cert-grid{grid-template-columns:1fr;}
+    .api-stats{grid-template-columns:1fr;}
+  }
+  @media(max-width:640px){
+    .navlinks{display:none;}
+    .menu-toggle{display:block;}
+    .skills-grid{grid-template-columns:1fr;}
+    section{padding:64px 0;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo"><span class="dot"></span> ISHA.QA</div>
+    <ul class="navlinks" id="navlinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#testcases">Test Cases</a></li>
+      <li><a href="#bugs">Bugs</a></li>
+      <li><a href="#api">API</a></li>
+      <li><a href="#certifications">Certs</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a class="btn-cv" href="docs/Resume.pdf" target="_blank">⬇ Resume</a>
+  </nav>
+</header>
+
+<!-- 1. HOME -->
+<section id="home">
+  <div class="wrap">
+    <div class="hero-status">test_suite.run() — 40+ passed</div>
+    <h1>Hi, I'm <span>Isha</span><br>Manual QA Engineer.</h1>
+    <p class="hero-sub">Final-year B.Sc. CSIT student with a strong interest in Software Quality Assurance. I enjoy finding bugs, writing detailed test cases, performing API testing with Postman, and ensuring software quality. Currently seeking a QA Internship where I can contribute and keep learning.</p>
+    <div class="hero-tags">
+      <span class="tag">Manual Testing</span>
+      <span class="tag">Test Case Design</span>
+      <span class="tag">API Testing</span>
+      <span class="tag">Bug Reporting</span>
+      <span class="tag">SDLC / STLC</span>
+      <span class="tag">Agile Scrum</span>
+    </div>
+    <div class="hero-cta">
+      <a class="btn-primary" href="#projects">View Projects</a>
+      <a class="btn-outline" href="#contact">Let's Talk</a>
+    </div>
+  </div>
+</section>
+
+<!-- 2. ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="eyebrow">whoami</div>
+    <h2>About Me</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm a final-year B.Sc. CSIT student building a strong foundation in software quality assurance. My focus is on manual testing — designing thorough test cases, executing structured test runs, and reporting defects clearly so teams can ship with confidence.</p>
+        <p>I'm comfortable working across the full testing lifecycle: understanding requirements, writing test scenarios and cases, executing them against real applications, logging bugs with reproducible steps, and validating APIs with Postman. I also follow Agile basics, so I'm used to working in sprints, attending stand-ups, and prioritizing test coverage against tight deadlines.</p>
+      </div>
+      <ul class="checklist">
+        <li><span class="ck">✓</span> Final-year B.Sc. CSIT student</li>
+        <li><span class="ck">✓</span> Interested in Manual Testing</li>
+        <li><span class="ck">✓</span> Basic API Testing</li>
+        <li><span class="ck">✓</span> Test Case Design</li>
+        <li><span class="ck">✓</span> Bug Reporting</li>
+        <li><span class="ck">✓</span> SDLC &amp; STLC</li>
+        <li><span class="ck">✓</span> Agile Basics</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 3. TECHNICAL SKILLS -->
+<section id="skills">
+  <div class="wrap">
+    <div class="eyebrow">stack --list</div>
+    <h2>Technical Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <h3>Testing</h3>
+        <ul>
+          <li>Manual Testing</li>
+          <li>Functional Testing</li>
+          <li>Regression Testing</li>
+          <li>Smoke Testing</li>
+          <li>API Testing</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <h3>Tools</h3>
+        <ul>
+          <li>Postman</li>
+          <li>Git</li>
+          <li>GitHub</li>
+          <li>JIRA (Basic)</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <h3>Languages</h3>
+        <ul>
+          <li>Java (Basic)</li>
+          <li>Python (Basic)</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <h3>Database</h3>
+        <ul>
+          <li>MySQL</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <h3>Methodologies</h3>
+        <ul>
+          <li>SDLC</li>
+          <li>STLC</li>
+          <li>Agile Scrum</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. PROJECTS -->
+<section id="projects">
+  <div class="wrap">
+    <div class="eyebrow">projects --executed</div>
+    <h2>Projects</h2>
+
+    <div class="project">
+      <div class="project-head">
+        <h3>SauceDemo — Manual Testing</h3>
+        <span class="pill pass">Completed</span>
+      </div>
+      <p class="desc">End-to-end manual testing of the SauceDemo e-commerce demo application (saucedemo.com), covering functional, regression, and smoke testing across the core purchase flow. Produced a structured test case spreadsheet, a live execution walkthrough, and a formal bug report for defects found during testing.</p>
+      <div class="module-row">
+        <span class="module-chip">✓ Login</span>
+        <span class="module-chip">✓ Products</span>
+        <span class="module-chip">✓ Cart</span>
+        <span class="module-chip">✓ Checkout</span>
+        <span class="module-chip">✓ Logout</span>
+      </div>
+      <div class="deliverables">
+        <div class="deliv"><b>40+</b>Test Cases</div>
+        <div class="deliv"><b>03</b>Bug Reports</div>
+        <div class="deliv"><b>100%</b>Test Execution Report</div>
+        <div class="deliv"><b>✓</b>API Testing</div>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <h3>API Testing — SauceDemo / REST Endpoints</h3>
+        <span class="pill pass">Completed</span>
+      </div>
+      <p class="desc">Validated core REST API endpoints using Postman — checking status codes, response times, and JSON response structure for each request, then organizing the work into a reusable collection and environment.</p>
+      <div class="module-row">
+        <span class="module-chip">POST Login</span>
+        <span class="module-chip">GET Products</span>
+        <span class="module-chip">GET Cart</span>
+        <span class="module-chip">DELETE Cart</span>
+      </div>
+      <div class="deliverables">
+        <div class="deliv"><b>1</b>Postman Collection</div>
+        <div class="deliv"><b>1</b>Environment File</div>
+        <div class="deliv"><b>✓</b>Response Screenshots</div>
+        <div class="deliv"><b>4</b>Endpoints Tested</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. TEST CASES -->
+<section id="testcases">
+  <div class="wrap">
+    <div class="eyebrow">test_cases --by-module</div>
+    <h2>Test Cases</h2>
+    <div class="tc-grid">
+      <div class="tc-card">
+        <div class="tc-count">14</div>
+        <h4>Login Test Cases</h4>
+        <p>Valid/invalid credentials, locked-out user, empty fields, field visibility &amp; UI checks.</p>
+        <a class="view" href="docs/login.xlsx" target="_blank" rel="noopener">View Details ↗</a>
+      </div>
+      <div class="tc-card">
+        <div class="tc-count">12</div>
+        <h4>Cart Test Cases</h4>
+        <p>Add/remove items, quantity checks, price totals, cart badge, empty-cart states.</p>
+        <a class="view" href="docs/mycart.xlsx" target="_blank" rel="noopener">View Details ↗</a>
+      </div>
+      <div class="tc-card">
+        <div class="tc-count">12</div>
+        <h4>Signup Test Cases</h4>
+        <p>Field validation, required fields, duplicate account handling, success &amp; error states.</p>
+        <a class="view" href="docs/signup.xlsx" target="_blank" rel="noopener">View Details ↗</a>
+      </div>
+      <div class="tc-card">
+        <div class="tc-count">16</div>
+        <h4>Checkout Test Cases</h4>
+        <p>Form validation, order summary, tax calculation, payment info, order completion.</p>
+        <a class="view" href="docs/checkout.xlsx" target="_blank" rel="noopener">View Details ↗</a>
+      </div>
+    </div>
+    <p style="margin-top:18px;font-size:12.5px;color:var(--text-faint);font-family:var(--mono);">* Upload these .xlsx files into a "docs" folder in your repo so the links work once hosted.</p>
+  </div>
+</section>
+
+<!-- 6. BUG REPORTS -->
+<section id="bugs">
+  <div class="wrap">
+    <div class="eyebrow">defects --tracked</div>
+    <h2>Bug Reports</h2>
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Module</th><th>Description</th><th>Severity</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id">BUG-001</td>
+          <td>Login</td>
+          <td>Username input field not visible on initial page load</td>
+          <td><span class="sev high">High</span></td>
+          <td><span class="pill closed">Closed</span></td>
+        </tr>
+        <tr>
+          <td class="id">BUG-002</td>
+          <td>Checkout</td>
+          <td>Tax value not recalculated after quantity change</td>
+          <td><span class="sev medium">Medium</span></td>
+          <td><span class="pill open">Open</span></td>
+        </tr>
+        <tr>
+          <td class="id">BUG-003</td>
+          <td>Cart</td>
+          <td>Cart item count badge fails to update after removing last item</td>
+          <td><span class="sev low">Low</span></td>
+          <td><span class="pill closed">Closed</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 7. API TESTING -->
+<section id="api">
+  <div class="wrap">
+    <div class="eyebrow">postman --run</div>
+    <h2>API Testing</h2>
+    <div class="api-panel">
+      <div class="api-tabbar">
+        <div class="method">GET</div>
+        <div>/products</div>
+      </div>
+      <div class="api-body">
+        <div class="api-stats">
+          <div class="api-stat"><span>Status Code</span><b class="ok">200 OK</b></div>
+          <div class="api-stat"><span>Response Time</span><b>142 ms</b></div>
+          <div class="api-stat"><span>Assertions</span><b class="ok">5 / 5 Passed</b></div>
+        </div>
+        <pre class="json">{
+  <span class="k">"id"</span>: <span class="s">"4"</span>,
+  <span class="k">"name"</span>: <span class="s">"Sauce Labs Backpack"</span>,
+  <span class="k">"price"</span>: <span class="s">29.99</span>,
+  <span class="k">"inStock"</span>: <span class="s">true</span>
+}</pre>
+        <ul class="assertions">
+          <li>Status code is 200</li>
+          <li>Response time is below 500ms</li>
+          <li>Response body is valid JSON</li>
+          <li>Product list is not empty</li>
+          <li>Each product has id, name and price</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:16px;font-size:12.5px;color:var(--text-faint);font-family:var(--mono);">* Swap in actual Postman screenshots/exports once available.</p>
+  </div>
+</section>
+
+<!-- 8. CERTIFICATIONS -->
+<section id="certifications">
+  <div class="wrap">
+    <div class="eyebrow">credentials --verified</div>
+    <h2>Certifications</h2>
+    <div class="cert-grid" style="grid-template-columns:1fr;max-width:480px;">
+      <div class="cert-card">
+        <div class="cert-icon">QA</div>
+        <div>
+          <h4>QA Basics</h4>
+          <p>Fundamentals of software quality assurance, SDLC, and STLC.</p>
+          <a href="docs/certificate_CION-21458.pdf" target="_blank" style="font-family:var(--mono);font-size:12px;color:var(--accent);display:inline-block;margin-top:10px;">View Certificate ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. RESUME -->
+<section id="resume">
+  <div class="wrap">
+    <div class="eyebrow">download --resume</div>
+    <h2>Resume</h2>
+    <div class="resume-box">
+      <p>Get the full picture — education, experience, projects, and skills — in one PDF.</p>
+      <a class="btn-primary" href="docs/Resume.pdf" download="Isha-Resume.pdf">⬇ Download Resume (PDF)</a>
+      <p style="margin-top:14px;font-size:12px;color:var(--text-faint);font-family:var(--mono);">* Upload your resume PDF into the "docs" folder as Resume.pdf.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 10. CONTACT -->
+<section id="contact" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="eyebrow">contact --open</div>
+    <h2>Contact</h2>
+    <div class="contact-grid">
+      <ul class="contact-list">
+        <li><span class="label">Name</span> Isha</li>
+        <li><span class="label">Email</span> <a href="mailto:eshapathak45@gmail.com">eshapathak45@gmail.com</a></li>
+        <li><span class="label">GitHub</span> <a href="https://github.com/ishap-pthk" target="_blank" rel="noopener">github.com/ishap-pthk</a></li>
+      </ul>
+      <div class="contact-cta">
+        <p>Open to QA Internship and Junior QA Engineer roles. I'm quick to respond and happy to walk through any of the test artifacts above in more detail.</p>
+        <a class="btn-primary" href="mailto:eshapathak45@gmail.com">Email Me</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>Isha · QA Portfolio · Built for internship applications</footer>
+
+<script>
+  document.querySelectorAll('.navlinks a').forEach(a=>{
+    a.addEventListener('click',()=>{document.getElementById('navlinks').style.display='';});
+  });
+</script>
+
+</body>
+</html>
